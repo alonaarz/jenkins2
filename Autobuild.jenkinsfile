@@ -1,0 +1,40 @@
+#!groovy
+//  groovy Jenkinsfile
+pipeline  {
+    agent any;
+    stages {
+        stage("Automated docker image build") {
+            steps {
+                echo 'Creating frontend docker image ...'
+                sh "docker build --no-cache -t macnaer/webserver . "                
+            }
+        }
+        stage("docker login") {
+            steps {
+                echo " ============== docker login =================="
+                withCredentials([usernamePassword(credentialsId: 'DockerHub-Credentials', usernameVariable: 'USERNAME', passwordVariable: 'PASSWORD')]) {
+                    sh '''
+                    docker login -u $USERNAME -p $PASSWORD
+                    '''
+                }
+            }
+        }
+        stage("docker image push") {
+            steps {
+                echo " ============== pushing webserver image =================="
+                sh '''
+                docker push macnaer/webserver
+                '''
+            }
+        }
+	stage("docker image webserver run") {
+            steps {
+                echo " ============== Run webserer  =================="
+                sh '''
+                docker run -d --name=webserver --restart=always -p 80:80  macnaer/webserver
+                '''
+            }
+        }
+
+    }
+}
