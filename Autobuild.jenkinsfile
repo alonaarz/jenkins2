@@ -27,14 +27,21 @@ pipeline  {
                 '''
             }
         }
-	stage("docker image webserver run") {
-            steps {
-                echo " ============== Run webserer  =================="
-                sh '''
-                docker run -d --name=webserver --restart=always -p :8081  macnaer/jenkins
-                '''
-            }
-        }
+stage("docker image webserver run") {
+    steps {
+        echo " ============== Run webserver =================="
+        sh '''
+        # Якщо контейнер існує, зупинити та видалити його
+        if [ $(docker ps -aq -f name=webserver) ]; then
+            docker stop webserver
+            docker rm webserver
+        fi
+
+        # Запустити контейнер заново
+        docker run -d --name=webserver --restart=always -p 8081:8081 macnaer/jenkins
+        '''
+    }
+}
 
     }
 }
