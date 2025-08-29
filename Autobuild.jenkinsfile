@@ -28,20 +28,13 @@ pipeline  {
             }
         }
 stage("docker image webserver run") {
-    steps {
-        echo " ============== Run webserver =================="
-        sh '''
-        # Якщо контейнер існує, зупинити та видалити його
-        if [ $(docker ps -aq -f name=jenkins) ]; then
-            docker stop jenkins
-            docker rm jenkins
-        fi
-
-        # Запустити контейнер заново
-        docker run -d --name=jenkins --restart=always -p 8081:8081 alonaarz/jenkins
-        '''
-    }
-}
+            steps {
+                echo " ============== Run webserer  =================="
+                sh '''
+                docker run -d --name=jenkins --restart=always -p :8081  alonaarz/jenkins
+                '''
+            }
+        }
 
     }
 }
