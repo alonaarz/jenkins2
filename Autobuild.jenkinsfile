@@ -31,8 +31,11 @@ stage("docker image webserver run") {
             steps {
                 echo " ============== Run webserer  =================="
                 sh '''
-                docker run -d --name=jenkins --restart=always -p :8081  alonaarz/jenkins:latest
-                '''
+docker stop jenkins || true
+        docker rm jenkins || true
+        docker run -d --name=jenkins --restart=always -p 8081:80 alonaarz/jenkins:latest
+        '''        
+        '''
             }
         }
 
