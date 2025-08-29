@@ -34,7 +34,6 @@ stage("docker image webserver run") {
 docker stop jenkins || true
         docker rm jenkins || true
         docker run -d --name=jenkins --restart=always -p 8081:80 alonaarz/jenkins:latest
-        '''        
         '''
             }
         }
