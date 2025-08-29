@@ -6,7 +6,7 @@ pipeline  {
         stage("Automated docker image build") {
             steps {
                 echo 'Creating frontend docker image ...'
-                sh "docker build --no-cache -t macnaer/webserver . "                
+                sh "docker build --no-cache -t macnaer/jenkins . "                
             }
         }
         stage("docker login") {
@@ -23,7 +23,7 @@ pipeline  {
             steps {
                 echo " ============== pushing webserver image =================="
                 sh '''
-                docker push macnaer/webserver
+                docker push macnaer/jenkins
                 '''
             }
         }
@@ -31,7 +31,7 @@ pipeline  {
             steps {
                 echo " ============== Run webserer  =================="
                 sh '''
-                docker run -d --name=webserver --restart=always -p 80:80  macnaer/webserver
+                docker run -d --name=webserver --restart=always -p :8081  macnaer/jenkins
                 '''
             }
         }
